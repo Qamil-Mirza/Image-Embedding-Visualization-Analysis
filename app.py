@@ -15,6 +15,7 @@ fig = px.scatter_3d(df, x='x', y='y', z='z', color='label', hover_data=['image_p
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
+    html.H1(f"Image Embeddings Visualization w/ {df.shape[0]} Images"),
     dcc.Graph(id='scatter-plot', figure=fig),
     html.Div(id='image-display', children=[
         html.Img(id='selected-image', src='', style={'width': '300px', 'height': '300px'}),

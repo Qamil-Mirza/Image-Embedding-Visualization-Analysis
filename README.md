@@ -18,9 +18,9 @@ Run the following commands to download the dataset and store it locally in the a
 ```
 kaggle datasets download -d aayushpurswani/diamond-images-dataset
 mkdir assets
-cd assets
 mkdir diamond_images
 unzip diamond-images-dataset.zip -d diamond_images
+mv diamond_images assets/
 ```
 
 ## Project Structure
