@@ -2,6 +2,11 @@
 This project shows you how to generate embeddings with the transformers library, reduce those embeddings to plottable dimensions, and visualize these embeddings which are then served via the plotly Dash app. To get started follow the following steps
 
 ## Libraries
+Run the below command to install libraries and dependencies:
+
+```
+pip install requirements.txt
+```
 
 ## Dataset download
 run the below to download the dataset and store it locally in assets folder: 
