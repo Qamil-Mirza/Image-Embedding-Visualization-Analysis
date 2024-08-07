@@ -5,14 +5,13 @@ This project shows you how to generate embeddings with the transformers library,
 Run the below command to install libraries and dependencies:
 
 ```
-pip install requirements.txt
+poetry install 
 ```
 
-## Dataset download
-run the below to download the dataset and store it locally in assets folder: 
-This project shows you how to generate embeddings with the transformers library, reduce those embeddings to plottable dimensions, and visualize these embeddings which are then served via the plotly Dash app. To get started, follow the following steps:
-
-## Libraries
+Activate the virtual environment created by poetry by doing:
+```
+poetry shell
+```
 
 ## Dataset download
 Run the following commands to download the dataset and store it locally in the assets folder:
@@ -25,3 +24,5 @@ unzip diamond-images-dataset.zip -d diamond_images
 ```
 
 ## Project Structure
+app.py: Main file to get the dash app working
+settings.py: 

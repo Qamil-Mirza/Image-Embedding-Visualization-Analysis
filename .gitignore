@@ -1,5 +1,5 @@
 __pycache__/
-
+.venv/
 /* Data */
 diamond-images-dataset.zip
 assets/

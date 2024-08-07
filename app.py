@@ -33,9 +33,8 @@ def display_image_and_label(clickData):
     # Get the index of the clicked point
     point_index = clickData['points'][0]['pointNumber']
     # Get the corresponding image path and label
-    image_path = df.iloc[point_index]['image_path']
+    image_path = df.iloc[point_index]['image_path'].replace('./assets/', '')
     label = df.iloc[point_index]['label']
-    
     return app.get_asset_url(image_path), f"Class: {label}"
 
 if __name__ == '__main__':

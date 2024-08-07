@@ -2,7 +2,7 @@ from utils import *
 from settings import *
 
 # Get image paths and labels
-image_paths, labels = get_image_paths_and_labels(DATASET_ROOT_DIR, num_images=N_IMAGES)
+image_paths, labels = get_image_paths_and_labels(f'./assets/{DATASET_ROOT_DIR}', num_images=N_IMAGES)
 
 # display summary of run settings
 run_settings_summary()
