@@ -6,7 +6,8 @@ from dash.dependencies import Input, Output
 import pandas as pd
 
 # Read in the data
-df = pd.read_csv('embedding_image_df.csv')
+CSV_FILE = 'embedding_image_df.csv'
+df = pd.read_csv(CSV_FILE)
 
 # Create a Plotly 3D scatter plot with color coding by class label
 fig = px.scatter_3d(df, x='x', y='y', z='z', color='label', hover_data=['image_path'])
@@ -32,10 +33,10 @@ def display_image_and_label(clickData):
     if clickData is None:
         return '', ''
     # Get the index of the clicked point
-    point_index = clickData['points'][0]['pointNumber']
+    image_url = clickData['points'][0]['customdata'][0]
     # Get the corresponding image path and label
-    image_path = df.iloc[point_index]['image_path'].replace('./assets/', '')
-    label = df.iloc[point_index]['label']
+    image_path = image_url.replace('./assets/', '')
+    label = os.path.basename(os.path.dirname(image_url))
     return app.get_asset_url(image_path), f"Class: {label}"
 
 if __name__ == '__main__':
