@@ -41,10 +41,12 @@ First, create a folder as such:
 `mkdir embeddings_data`
 
 1. Configure Embedding Generation settings via the settings.py file
+
 2. utils.py contain function definitions for collecting/cleaning image paths/labels, generating image embeddings, reducing the image embedding dimensions and finally compiling the reduced embeddings, image paths and image labels into a dataframe
+
 3. Run generate_embedding_df.py to save the embedding_image_df.csv file into the embeddings_data folder
 
-_There are also some important caveats to know: V0.1.0 of this embedding generator does not support / is not tested with image resolutions other than 224x224x3. As such please pass in images of the mentioned resolution._
+**There are also some important caveats to know: V0.1.0 of this embedding generator does not support / is not tested with image resolutions other than 224x224x3. As such please pass in images of the mentioned resolution.**
 
 
 ### Part 2: Embedding Visualization
@@ -54,6 +56,6 @@ _There are also some important caveats to know: V0.1.0 of this embedding generat
 
 
 ## V2 Improvements In The Works
-[] UI Improvements
-[] Added Support for images of varying sizes
-[] Adding Unit Tests 
+[ ] UI Improvements
+[ ] Added Support for images of varying sizes
+[ ] Adding Unit Tests 
