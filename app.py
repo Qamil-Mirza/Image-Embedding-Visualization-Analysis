@@ -6,7 +6,7 @@ from dash.dependencies import Input, Output
 import pandas as pd
 
 # Read in the data
-CSV_FILE = 'embedding_image_df.csv'
+CSV_FILE = 'main.csv'
 df = pd.read_csv(CSV_FILE)
 
 # Create a Plotly 3D scatter plot with color coding by class label

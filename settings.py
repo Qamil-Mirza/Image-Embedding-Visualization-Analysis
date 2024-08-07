@@ -8,20 +8,16 @@ print(f"Using device: {device}")
 # DATASET_ROOT_DIR = 'coffee_beans'
 DATASET_ROOT_DIR = 'diamond_images'
 
-# Number of images 
+# Sample Size
 N_IMAGES = 100
+BATCH_SIZE = 100
 
 # Google ViT
 PROCESSOR = ViTImageProcessor.from_pretrained('google/vit-base-patch16-224')
 MODEL = ViTModel.from_pretrained('google/vit-base-patch16-224')
 MODEL_NAME = 'Google VIT'
 
-# Facebook Dino
-# PROCESSOR = AutoImageProcessor.from_pretrained('facebook/dinov2-base')
-# MODEL = AutoModel.from_pretrained('facebook/dinov2-base')
-# MODEL_NAME
-
-# Clustering Algorithms
+# Clustering Algorithm
 CLUSTERING_ALGORITHM = 'PCA'
 
 # Number of components for dimensionality reduction
