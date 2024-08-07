@@ -56,6 +56,6 @@ First, create a folder as such:
 
 
 ## V2 Improvements In The Works
-[ ] UI Improvements
-[ ] Added Support for images of varying sizes
-[ ] Adding Unit Tests 
+- UI Improvements
+- Added Support for images of varying sizes
+- Adding Unit Tests 
