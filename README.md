@@ -32,6 +32,28 @@ rm -r './assets/diamond_images/web_scraped/round'
 - we remove the first file as it is corrupted
 - we remove the folder since we want more class diversity in the data
 
-## Project Structure
-app.py: Main file to get the dash app working
-settings.py: 
+## Project Structure 
+The project is essentially split into two parts:
+
+### Part 1: Embedding Generation
+First, create a folder as such:
+
+`mkdir embeddings_data`
+
+1. Configure Embedding Generation settings via the settings.py file
+2. utils.py contain function definitions for collecting/cleaning image paths/labels, generating image embeddings, reducing the image embedding dimensions and finally compiling the reduced embeddings, image paths and image labels into a dataframe
+3. Run generate_embedding_df.py to save the embedding_image_df.csv file into the embeddings_data folder
+
+_There are also some important caveats to know: V0.1.0 of this embedding generator does not support / is not tested with image resolutions other than 224x224x3. As such please pass in images of the mentioned resolution._
+
+
+### Part 2: Embedding Visualization
+1. At the top of the app.py file (`CSV_FILE`), please specify the csv file you wish to visualize. Simply give the name of the csv file, the full path is not required. 
+
+2. Run app.py, allowing you to view and interact with the 3D plot. You'll be able to see the visualization at http://127.0.0.1:8050/
+
+
+## V2 Improvements In The Works
+[] UI Improvements
+[] Added Support for images of varying sizes
+[] Adding Unit Tests 

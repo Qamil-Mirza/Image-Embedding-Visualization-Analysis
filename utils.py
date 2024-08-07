@@ -116,6 +116,6 @@ def make_embedding_image_df(reduced_embeddings, image_paths,  image_labels, save
     df['image_path'] = image_paths
     df['label'] = image_labels
     if save_to_csv:
-        df.to_csv('embedding_image_df.csv', index=False)
+        df.to_csv('./embeddings_data/embedding_image_df.csv', index=False)
         print("DataFrame saved to embedding_image_df.csv")
     return df

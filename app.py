@@ -7,7 +7,7 @@ import pandas as pd
 
 # Read in the data
 CSV_FILE = 'main.csv'
-df = pd.read_csv(CSV_FILE)
+df = pd.read_csv(f"./embeddings_data/{CSV_FILE}")
 
 # Create a Plotly 3D scatter plot with color coding by class label
 fig = px.scatter_3d(df, x='x', y='y', z='z', color='label', hover_data=['image_path'])
@@ -37,6 +37,7 @@ def display_image_and_label(clickData):
     # Get the corresponding image path and label
     image_path = image_url.replace('./assets/', '')
     label = os.path.basename(os.path.dirname(image_url))
+    print(f"Selected image: {image_path}")
     return app.get_asset_url(image_path), f"Class: {label}"
 
 if __name__ == '__main__':
