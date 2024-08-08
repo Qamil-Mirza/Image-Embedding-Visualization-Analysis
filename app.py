@@ -17,11 +17,14 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div([
     html.H1(f"Image Embeddings Visualization w/ {df.shape[0]} Images"),
-    dcc.Graph(id='scatter-plot', figure=fig),
-    html.Div(id='image-display', children=[
-        html.Img(id='selected-image', src='', style={'width': '300px', 'height': '300px'}),
-        html.Div(id='selected-label', style={'margin-top': '10px', 'font-size': '20px'})
-    ])
+    html.P("Click on a point in the scatter plot to display the image and its class label."),
+    html.Div(className='container', children=[
+        dcc.Graph(id='scatter-plot', figure=fig),
+        html.Div(id='image-display', children=[
+            html.Img(id='selected-image', src=''),
+            html.P(id='selected-label')
+        ])
+    ])   
 ])
 
 @app.callback(
@@ -37,7 +40,6 @@ def display_image_and_label(clickData):
     # Get the corresponding image path and label
     image_path = image_url.replace('./assets/', '')
     label = os.path.basename(os.path.dirname(image_url))
-    print(f"Selected image: {image_path}")
     return app.get_asset_url(image_path), f"Class: {label}"
 
 if __name__ == '__main__':

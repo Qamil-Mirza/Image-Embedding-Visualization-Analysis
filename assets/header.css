@@ -1,0 +1,43 @@
+body {
+    font-family: sans-serif;
+    height: 100vh;
+}
+
+h1, p {
+    color: #333;
+    font-family: sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+
+#scatter-plot {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 80vh;
+}
+
+#image-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-left: 4px;
+}
+
+#selected-image {
+    width: 224px;
+    height: 224px;
+}
+
+#selected-label {
+    margin-top: 10px;
+    font-size: 20px;
+}
