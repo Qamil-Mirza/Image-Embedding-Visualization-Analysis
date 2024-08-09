@@ -7,7 +7,7 @@ import pandas as pd
 
 # App settings
 CSV_FILE = '1M_points.csv'
-PLOT_DIMS = 3
+PLOT_DIMS = 2
 
 # Read in the data
 df = pd.read_csv(f"./embeddings_data/{CSV_FILE}")
@@ -18,7 +18,7 @@ if df.shape[0] > 500000:
 
 # Create a Plotly 3D scatter plot with color coding by class label
 if PLOT_DIMS == 2:
-    fig = px.scatter(df, x='x', y='y', color='label', hover_data=['image_path'], opacity=0.5)
+    fig = px.scatter(df, x='x', y='y', color='label', hover_data=['image_path'], opacity=0.5, render_mode='webgl')
 elif PLOT_DIMS == 3:
     fig = px.scatter_3d(df, x='x', y='y', z='z', color='label', hover_data=['image_path'])
 else:
