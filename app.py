@@ -5,12 +5,20 @@ import plotly.express as px
 from dash.dependencies import Input, Output
 import pandas as pd
 
-# Read in the data
+# App settings
 CSV_FILE = 'main.csv'
+PLOT_DIMS = 2
+
+# Read in the data
 df = pd.read_csv(f"./embeddings_data/{CSV_FILE}")
 
 # Create a Plotly 3D scatter plot with color coding by class label
-fig = px.scatter_3d(df, x='x', y='y', z='z', color='label', hover_data=['image_path'])
+if PLOT_DIMS == 2:
+    fig = px.scatter(df, x='x', y='y', color='label', hover_data=['image_path'], opacity=0.5)
+elif PLOT_DIMS == 3:
+    fig = px.scatter_3d(df, x='x', y='y', z='z', color='label', hover_data=['image_path'])
+else:
+    raise ValueError("Invalid number of dimensions. Choose 2 or 3.")
 
 # Set up Dash app
 app = dash.Dash(__name__)
@@ -34,7 +42,7 @@ app.layout = html.Div([
 )
 def display_image_and_label(clickData):
     if clickData is None:
-        return '', ''
+        return 'https://placedog.net/640/224?random', 'Wild Doge appears!'
     # Get the index of the clicked point
     image_url = clickData['points'][0]['customdata'][0]
     # Get the corresponding image path and label
