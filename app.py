@@ -6,11 +6,15 @@ from dash.dependencies import Input, Output
 import pandas as pd
 
 # App settings
-CSV_FILE = 'main.csv'
-PLOT_DIMS = 2
+CSV_FILE = '1M_points.csv'
+PLOT_DIMS = 3
 
 # Read in the data
 df = pd.read_csv(f"./embeddings_data/{CSV_FILE}")
+
+# Check if the num rows > 500k, assert to many rows for 3d
+if df.shape[0] > 500000:
+    assert PLOT_DIMS == 2, "Too many rows for 3D plot. Set PLOT_DIMS to 2."
 
 # Create a Plotly 3D scatter plot with color coding by class label
 if PLOT_DIMS == 2:
@@ -25,7 +29,7 @@ app = dash.Dash(__name__)
 
 app.layout = html.Div([
     html.H1(f"Image Embeddings Visualization w/ {df.shape[0]} Images"),
-    html.P("Click on a point in the scatter plot to display the image and its class label."),
+    html.P("Click on a point in the scatter plot to display the image and its class label. Click on the legend to toggle classes."),
     html.Div(className='container', children=[
         dcc.Graph(id='scatter-plot', figure=fig),
         html.Div(id='image-display', children=[
