@@ -35,6 +35,7 @@ app.layout = html.Div([
     html.P("Click on a point in the scatter plot to display the image and its class label. Click on the legend to toggle classes."),
     html.Div(className='container', children=[
         html.Div(id='image-display', children=[
+            html.H4("Selected Point Image"),
             html.Img(id='selected-image', src=''),
             html.P(id='selected-label')
         ]),

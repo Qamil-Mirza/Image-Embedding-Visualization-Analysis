@@ -4,7 +4,7 @@ body {
     text-align: center;
 }
 
-h1, p {
+h1, h4, p {
     color: #333;
     font-family: sans-serif;
 }
