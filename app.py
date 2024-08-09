@@ -6,11 +6,12 @@ from dash.dependencies import Input, Output
 import pandas as pd
 
 # App settings
-CSV_FILE = '1M_points.csv'
+CSV_FILE = 'main.csv'
 PLOT_DIMS = 2
 
 # Read in the data
 df = pd.read_csv(f"./embeddings_data/{CSV_FILE}")
+PLOT_TITLE = f"Image Embeddings Visualization: {df.shape[0]} Images - {PLOT_DIMS}D"
 
 # Check if the num rows > 500k, assert to many rows for 3d
 if df.shape[0] > 500000:
@@ -24,18 +25,20 @@ elif PLOT_DIMS == 3:
 else:
     raise ValueError("Invalid number of dimensions. Choose 2 or 3.")
 
+fig.update_layout(title_text=PLOT_TITLE, title_x=0.5)
+
 # Set up Dash app
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
-    html.H1(f"Image Embeddings Visualization w/ {df.shape[0]} Images"),
+    html.H1("SUPA Embeddings Visualizer"),
     html.P("Click on a point in the scatter plot to display the image and its class label. Click on the legend to toggle classes."),
     html.Div(className='container', children=[
-        dcc.Graph(id='scatter-plot', figure=fig),
         html.Div(id='image-display', children=[
             html.Img(id='selected-image', src=''),
             html.P(id='selected-label')
-        ])
+        ]),
+        dcc.Graph(id='scatter-plot', figure=fig),
     ])   
 ])
 
