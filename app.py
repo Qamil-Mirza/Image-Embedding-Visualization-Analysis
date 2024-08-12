@@ -22,7 +22,7 @@ if df.shape[0] > 500000:
     assert PLOT_DIMS == 2, "Too many rows for 3D plot. Set PLOT_DIMS to 2."
 
 if PLOT_DIMS == 2:
-    fig = px.scatter(df, x='x', y='y', color='label', hover_data=['image_path'], opacity=0.5, render_mode='webgl')
+    fig = px.scatter(df, x='x', y='y', color='label', hover_data=['image_path'], opacity=0.75, symbol='label', render_mode='webgl')
 elif PLOT_DIMS == 3:
     fig = px.scatter_3d(df, x='x', y='y', z='z', color='label', hover_data=['image_path'])
 else:
@@ -37,7 +37,7 @@ app.layout = html.Div([
     html.P("Click on a point to see the image and class label or use the lasso/box-select tool to select multiple points."),
     html.P("Click on the legend to toggle classes on/off. Hold down shift while clicking on points to cherry pick multiple points"),
     dcc.Graph(id='scatter-plot', figure=fig),
-    html.H4("Selected Points"),
+    html.H2("Selected Points"),
     html.Div(id='select-data'),
     html.Div([
         html.Button('<', id='decrement-button', n_clicks=0),
