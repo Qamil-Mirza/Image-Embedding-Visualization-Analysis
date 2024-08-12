@@ -42,3 +42,10 @@ h1, h4, p {
     margin-top: 10px;
     font-size: 20px;
 }
+
+#pagination {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,23 +1,26 @@
 import os
 import dash
-from dash import dcc, html
+from dash import dcc, html, callback_context
 import plotly.express as px
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import pandas as pd
+import math
 
 # App settings
 CSV_FILE = 'main.csv'
 PLOT_DIMS = 2
+IMAGES_PER_PAGE = 12
+INITIAL_PAGE_NUM = 1
 
-# Read in the data
+# Initial setup
+page_num = INITIAL_PAGE_NUM
+
 df = pd.read_csv(f"./embeddings_data/{CSV_FILE}")
 PLOT_TITLE = f"Image Embeddings Visualization: {df.shape[0]} Images - {PLOT_DIMS}D"
 
-# Check if the num rows > 500k, assert to many rows for 3d
 if df.shape[0] > 500000:
     assert PLOT_DIMS == 2, "Too many rows for 3D plot. Set PLOT_DIMS to 2."
 
-# Create a Plotly 3D scatter plot with color coding by class label
 if PLOT_DIMS == 2:
     fig = px.scatter(df, x='x', y='y', color='label', hover_data=['image_path'], opacity=0.5, render_mode='webgl')
 elif PLOT_DIMS == 3:
@@ -35,18 +38,27 @@ app.layout = html.Div([
     html.P("Click on the legend to toggle classes on/off."),
     dcc.Graph(id='scatter-plot', figure=fig),
     html.H4("Selected Points"),
-    html.Div(id='select-data')   
+    html.Div(id='select-data'),
+    html.Div([
+        html.Button('Decrement', id='decrement-button', n_clicks=0),
+        html.P(id='page-num-display', children=f'{page_num}'),
+        html.Button('Increment', id='increment-button', n_clicks=0),
+    ], id='pagination'),
+    html.Div(id='hidden-page-num', style={'display': 'none'}, children=f'{page_num}')
 ])
-
-# Combined Callback
 
 @app.callback(
     Output('select-data', 'children'),
     [Input('scatter-plot', 'clickData'),
-     Input('scatter-plot', 'selectedData')]
+     Input('scatter-plot', 'selectedData'),
+     Input('hidden-page-num', 'children')]
 )
-def display_images(clickData, selectedData):
+def display_images(clickData, selectedData, page_num):
     items = []
+    page_num = int(page_num)
+
+    start_index = (page_num - 1) * IMAGES_PER_PAGE
+    end_index = start_index + IMAGES_PER_PAGE
 
     # Handle clickData for a single point
     if clickData:
@@ -64,7 +76,7 @@ def display_images(clickData, selectedData):
     # Handle selectedData for multiple points
     if selectedData:
         items = []
-        for point in selectedData['points']:
+        for point in selectedData['points'][start_index:end_index]:
             image_url = point['customdata'][0]
             image_path = image_url.replace('./assets/', '')
             label = os.path.basename(os.path.dirname(image_url))
@@ -82,7 +94,48 @@ def display_images(clickData, selectedData):
             html.P('No Points Selected. A wild Doge appears!')
         ])]
 
+    print(clickData, selectedData, page_num)
     return items
+
+# Pagination
+@app.callback(
+    [Output('page-num-display', 'children'),
+     Output('hidden-page-num', 'children')],
+    [Input('increment-button', 'n_clicks'),
+     Input('decrement-button', 'n_clicks'),
+     Input('scatter-plot', 'relayoutData')],
+    [State('hidden-page-num', 'children'),
+     State('scatter-plot', 'selectedData'),
+     State('scatter-plot', 'clickData')]
+)
+def update_page_num(increment_clicks, decrement_clicks, relayoutData, page_num, selectedData):
+    page_num = int(page_num)
+    ctx = callback_context
+
+    if not ctx.triggered:
+        return f'{page_num}', f'{page_num}'
+    else:
+        button_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+    # Check if double-click occurred (reset page number to 1)
+    if relayoutData and 'xaxis.range' in relayoutData and 'yaxis.range' in relayoutData:
+        if 'autosize' in relayoutData:
+            page_num = INITIAL_PAGE_NUM
+        else:
+            page_num = int(page_num)
+
+    # Calculate the total number of pages
+    total_items = len(selectedData['points']) if selectedData else 0
+    total_pages = math.ceil(total_items / IMAGES_PER_PAGE)
+
+    if button_id == 'increment-button' and increment_clicks and page_num < total_pages:
+        page_num += 1
+    elif button_id == 'decrement-button' and decrement_clicks and page_num > 1:
+        page_num -= 1
+    else:
+        page_num = 1
+
+    return f'{page_num}', f'{page_num}'
 
 if __name__ == '__main__':
     app.run_server(debug=True)
