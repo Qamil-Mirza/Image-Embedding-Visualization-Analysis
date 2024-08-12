@@ -16,7 +16,7 @@ INITIAL_PAGE_NUM = 1
 page_num = INITIAL_PAGE_NUM
 
 df = pd.read_csv(f"./embeddings_data/{CSV_FILE}")
-PLOT_TITLE = f"Image Embeddings Visualization: {df.shape[0]} Images - {PLOT_DIMS}D"
+PLOT_TITLE = f"Image Embeddings Visualization: {df.shape[0]} Images"
 
 if df.shape[0] > 500000:
     assert PLOT_DIMS == 2, "Too many rows for 3D plot. Set PLOT_DIMS to 2."
