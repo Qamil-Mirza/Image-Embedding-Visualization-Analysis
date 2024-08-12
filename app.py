@@ -28,14 +28,14 @@ elif PLOT_DIMS == 3:
 else:
     raise ValueError("Invalid number of dimensions. Choose 2 or 3.")
 
-fig.update_layout(title_text=PLOT_TITLE, title_x=0.5)
+fig.update_layout(title_text=PLOT_TITLE, title_x=0.5, clickmode='event+select')
 
 # Set up Dash app layout
 app = dash.Dash(__name__)
 app.layout = html.Div([
     html.H1("SUPA Embeddings Visualizer"),
     html.P("Click on a point to see the image and class label or use the lasso/box-select tool to select multiple points."),
-    html.P("Click on the legend to toggle classes on/off."),
+    html.P("Click on the legend to toggle classes on/off. Hold down shift while clicking on points to cherry pick multiple points"),
     dcc.Graph(id='scatter-plot', figure=fig),
     html.H4("Selected Points"),
     html.Div(id='select-data'),
@@ -139,14 +139,19 @@ def update_page_num(increment_clicks, decrement_clicks, relayoutData, page_num, 
 @app.callback(
     [Output('decrement-button', 'disabled'),
      Output('increment-button', 'disabled')],
-    [Input('hidden-page-num', 'children')],
+    [Input('hidden-page-num', 'children'),
+     Input('scatter-plot', 'selectedData')],
     [State('scatter-plot', 'selectedData')]
 )
-def update_button_disabled(page_num, selectedData):
+def update_button_disabled(page_num, selectedData, stateSelectedData):
+    selectedData = selectedData or stateSelectedData
     total_items = len(selectedData['points']) if selectedData else 0
     total_pages = math.ceil(total_items / IMAGES_PER_PAGE)
     page_num = int(page_num)
-
+    
+    if total_items <= 12:
+        return True, True
+    
     decrement_disabled = page_num <= 1
     increment_disabled = page_num >= total_pages
 
