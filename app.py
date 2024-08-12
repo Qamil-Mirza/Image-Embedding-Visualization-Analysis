@@ -27,36 +27,62 @@ else:
 
 fig.update_layout(title_text=PLOT_TITLE, title_x=0.5)
 
-# Set up Dash app
+# Set up Dash app layout
 app = dash.Dash(__name__)
-
 app.layout = html.Div([
     html.H1("SUPA Embeddings Visualizer"),
-    html.P("Click on a point in the scatter plot to display the image and its class label. Click on the legend to toggle classes."),
-    html.Div(className='container', children=[
-        html.Div(id='image-display', children=[
-            html.H4("Selected Point Image"),
-            html.Img(id='selected-image', src=''),
-            html.P(id='selected-label')
-        ]),
-        dcc.Graph(id='scatter-plot', figure=fig),
-    ])   
+    html.P("Click on a point to see the image and class label or use the lasso/box-select tool to select multiple points."),
+    html.P("Click on the legend to toggle classes on/off."),
+    dcc.Graph(id='scatter-plot', figure=fig),
+    html.H4("Selected Points"),
+    html.Div(id='select-data')   
 ])
 
+# Combined Callback
+
 @app.callback(
-    [Output('selected-image', 'src'),
-     Output('selected-label', 'children')],
-    Input('scatter-plot', 'clickData')
+    Output('select-data', 'children'),
+    [Input('scatter-plot', 'clickData'),
+     Input('scatter-plot', 'selectedData')]
 )
-def display_image_and_label(clickData):
-    if clickData is None:
-        return 'https://placedog.net/640/224?random', 'Wild Doge appears!'
-    # Get the index of the clicked point
-    image_url = clickData['points'][0]['customdata'][0]
-    # Get the corresponding image path and label
-    image_path = image_url.replace('./assets/', '')
-    label = os.path.basename(os.path.dirname(image_url))
-    return app.get_asset_url(image_path), f"Class: {label}"
+def display_images(clickData, selectedData):
+    items = []
+
+    # Handle clickData for a single point
+    if clickData:
+        items = []
+        image_url = clickData['points'][0]['customdata'][0]
+        image_path = image_url.replace('./assets/', '')
+        label = os.path.basename(os.path.dirname(image_url))
+        items.append(
+            html.Div([
+                html.Img(src=app.get_asset_url(image_path), style={'height': '150px', 'margin': '5px'}),
+                html.P(f"Class: {label}", style={'text-align': 'center'})
+            ], style={'display': 'inline-block', 'margin': '10px'})
+        )
+
+    # Handle selectedData for multiple points
+    if selectedData:
+        items = []
+        for point in selectedData['points']:
+            image_url = point['customdata'][0]
+            image_path = image_url.replace('./assets/', '')
+            label = os.path.basename(os.path.dirname(image_url))
+            items.append(
+                html.Div([
+                    html.Img(src=app.get_asset_url(image_path), style={'height': '150px', 'margin': '5px'}),
+                    html.P(f"Class: {label}", style={'text-align': 'center'})
+                ], style={'display': 'inline-block', 'margin': '10px'})
+            )
+    
+    # Handle the case when no points are selected or clicked
+    if not items:
+        items = [html.Div([
+            html.Img(src='https://placedog.net/640/224?random'),
+            html.P('No Points Selected. A wild Doge appears!')
+        ])]
+
+    return items
 
 if __name__ == '__main__':
     app.run_server(debug=True)
