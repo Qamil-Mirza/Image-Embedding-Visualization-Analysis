@@ -40,9 +40,9 @@ app.layout = html.Div([
     html.H4("Selected Points"),
     html.Div(id='select-data'),
     html.Div([
-        html.Button('Decrement', id='decrement-button', n_clicks=0),
+        html.Button('<', id='decrement-button', n_clicks=0),
         html.P(id='page-num-display', children=f'{page_num}'),
-        html.Button('Increment', id='increment-button', n_clicks=0),
+        html.Button('>', id='increment-button', n_clicks=0),
     ], id='pagination'),
     html.Div(id='hidden-page-num', style={'display': 'none'}, children=f'{page_num}')
 ])
@@ -94,7 +94,6 @@ def display_images(clickData, selectedData, page_num):
             html.P('No Points Selected. A wild Doge appears!')
         ])]
 
-    print(clickData, selectedData, page_num)
     return items
 
 # Pagination
@@ -105,8 +104,7 @@ def display_images(clickData, selectedData, page_num):
      Input('decrement-button', 'n_clicks'),
      Input('scatter-plot', 'relayoutData')],
     [State('hidden-page-num', 'children'),
-     State('scatter-plot', 'selectedData'),
-     State('scatter-plot', 'clickData')]
+     State('scatter-plot', 'selectedData')]
 )
 def update_page_num(increment_clicks, decrement_clicks, relayoutData, page_num, selectedData):
     page_num = int(page_num)
@@ -136,6 +134,23 @@ def update_page_num(increment_clicks, decrement_clicks, relayoutData, page_num, 
         page_num = 1
 
     return f'{page_num}', f'{page_num}'
+
+# Button Disable
+@app.callback(
+    [Output('decrement-button', 'disabled'),
+     Output('increment-button', 'disabled')],
+    [Input('hidden-page-num', 'children')],
+    [State('scatter-plot', 'selectedData')]
+)
+def update_button_disabled(page_num, selectedData):
+    total_items = len(selectedData['points']) if selectedData else 0
+    total_pages = math.ceil(total_items / IMAGES_PER_PAGE)
+    page_num = int(page_num)
+
+    decrement_disabled = page_num <= 1
+    increment_disabled = page_num >= total_pages
+
+    return decrement_disabled, increment_disabled
 
 if __name__ == '__main__':
     app.run_server(debug=True)

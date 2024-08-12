@@ -49,3 +49,36 @@ h1, h4, p {
     justify-content: center;
     align-items: center;
 }
+
+button {
+    padding: 10px 20px;
+    background-color: #ffffff;
+    color: hwb(0 20% 80%);
+    border: 2px solid #4d4d4d;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:disabled {
+    background-color: #f2f2f2;
+    color: #999;
+    cursor: not-allowed;
+    border: 2px solid #999;
+}
+
+button:not(:disabled):hover {
+    border: 2px solid #7B68EE;
+}
+
+#decrement-button {
+    margin-right: 1rem;
+}
+
+#increment-button {
+    margin-left: 1rem;
+}
+
+#page-num-display {
+    font-size: large;
+}
