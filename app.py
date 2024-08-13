@@ -32,6 +32,7 @@ fig.update_layout(title_text=PLOT_TITLE, title_x=0.5, clickmode='event+select')
 
 # Set up Dash app layout
 app = dash.Dash(__name__)
+server = app.server
 app.layout = html.Div([
     html.H1("SUPA Embeddings Visualizer"),
     html.P("Click on a point to see the image and class label or use the lasso/box-select tool to select multiple points."),
